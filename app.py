@@ -5,7 +5,6 @@ from flask import Flask, session, url_for, redirect, render_template, request, a
 from db import *
 from db.database import list_users, verify, delete_user_from_db, add_user
 from db.database import read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id
-from db.database import image_upload_record, list_images_for_user, match_user_id_with_image_uid, delete_image_from_db
 from werkzeug.utils import secure_filename
 from joblib import load
 
@@ -51,13 +50,8 @@ def FUN_private():
                           [x[2] for x in notes_list],\
                           ["/delete_note/" + x[0] for x in notes_list])
 
-        images_list = list_images_for_user(session['current_user'])
-        images_table = zip([x[0] for x in images_list],\
-                          [x[1] for x in images_list],\
-                          [x[2] for x in images_list],\
-                          ["/delete_image/" + x[0] for x in images_list])
 
-        return render_template("private_page.html", notes = notes_table, images = images_table)
+        return render_template("private_page.html", notes = notes_table)
     else:
         return abort(401)
 
@@ -118,11 +112,6 @@ def FUN_delete_user(id):
         if id == "ADMIN": # ADMIN account can't be deleted.
             return abort(403)
 
-        # [1] Delete this user's images in image pool
-        images_to_remove = [x[0] for x in list_images_for_user(id)]
-        for f in images_to_remove:
-            image_to_delete_from_pool = [y for y in [x for x in os.listdir(app.config['UPLOAD_FOLDER'])] if y.split("-", 1)[0] == f][0]
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], image_to_delete_from_pool))
         # [2] Delele the records in database files
         delete_user_from_db(id)
         return(redirect(url_for("FUN_admin")))
