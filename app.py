@@ -1,11 +1,7 @@
-import os
-import datetime
-import hashlib
-from flask import Flask, session, url_for, redirect, render_template, request, abort, flash, Request
+from flask import Flask, session, url_for, redirect, render_template, request, abort
 from db import *
 from db.database import list_users, verify, delete_user_from_db, add_user
 from db.database import read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id
-from werkzeug.utils import secure_filename
 from joblib import load
 
 
