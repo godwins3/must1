@@ -73,6 +73,19 @@ def read_note_from_db(id):
 
     return result
 
+def read_vehicle_insurance_from_db(id):
+    _conn = sqlite3.connect(note_db_file_location)
+    _c = _conn.cursor()
+
+    command = "SELECT vehicle_id, FROM notes WHERE user = '" + id.upper() + "';" 
+    _c.execute(command)
+    result = _c.fetchall()
+
+    _conn.commit()
+    _conn.close()
+
+    return result
+
 def match_user_id_with_note_id(note_id):
     # Given the note id, confirm if the current user is the owner of the note which is being operated.
     _conn = sqlite3.connect(note_db_file_location)
@@ -106,27 +119,6 @@ def delete_note_from_db(note_id):
     _conn.commit()
     _conn.close()
 
-def image_upload_record(uid, owner, image_name, timestamp):
-    _conn = sqlite3.connect(image_db_file_location)
-    _c = _conn.cursor()
-
-    _c.execute("INSERT INTO images VALUES (?, ?, ?, ?)", (uid, owner, image_name, timestamp))
-
-    _conn.commit()
-    _conn.close()
-
-def list_images_for_user(owner):
-    _conn = sqlite3.connect(image_db_file_location)
-    _c = _conn.cursor()
-
-    command = "SELECT uid, timestamp, name FROM images WHERE owner = '{0}'".format(owner)
-    _c.execute(command)
-    result = _c.fetchall()
-
-    _conn.commit()
-    _conn.close()
-
-    return result
 
 def match_user_id_with_image_uid(image_uid):
     # Given the note id, confirm if the current user is the owner of the note which is being operated.
@@ -142,14 +134,6 @@ def match_user_id_with_image_uid(image_uid):
 
     return result
 
-def delete_image_from_db(image_uid):
-    _conn = sqlite3.connect(image_db_file_location)
-    _c = _conn.cursor()
-
-    _c.execute("DELETE FROM images WHERE uid = ?;", (image_uid))
-
-    _conn.commit()
-    _conn.close()
 
 
 

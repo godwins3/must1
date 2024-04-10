@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block page_title %}Insurance{% endblock %}
+{% block body %}
+    {{ super() }}
+
+    <form action="/add_vehicle_insurance" method ="post">
+        <div class="insurance-form">
+            <div class="control-group">
+                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <label class="  " for="vehicle-make"></label>
+            </div>
+            <div class="control-group">
+                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <label class="  " for="vehicle-model"></label>
+            </div>
+            <div class="control-group">
+                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <label class="  " for="vehicle-year"></label>
+            </div>
+            <div class="control-group">
+                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <label class="  " for="vehicle-last-maintenance-date"></label>
+            </div>
+            <div class="control-group">
+                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <label class="  " for="vehicle-insurance-due"></label>
+            </div>
+        </div>
+    </form>
+
+    {% if notes %}
+        <h3>Your Predictions</h3>
+        <table class="table small">
+            <thead>
+                <tr>
+                  <th>Make</th>
+                  <th>Model</th>
+                  <th>Year</th>
+                  <th>Last Maintenance Date</th>
+                  <th>Insurance Due</th>
+                  <th>Action</th>
+                </tr>
+            </thead>
+            {% for make, model, year, last_maintenance_date, insurance_due, act in insurance %}
+                    <tr>
+                       <td> {{ make }} </td>
+                       <td> {{ model }} </td>
+                       <td> {{ year }} </td>
+                       <td> {{ last_maintenance_date }} </td>
+                       <td> {{ insurance_due }} </td>
+                       <td><a href={{act}}>Delete</a></td>
+                    </tr>
+                    
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}

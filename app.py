@@ -1,7 +1,7 @@
 from flask import Flask, session, url_for, redirect, render_template, request, abort
 from db import *
 from db.database import list_users, verify, delete_user_from_db, add_user
-from db.database import read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id
+from db.database import read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id, read_vehicle_insurance_from_db
 from joblib import load
 
 
@@ -44,7 +44,7 @@ def FUN_private():
         notes_table = zip([x[0] for x in notes_list],\
                           [x[1] for x in notes_list],\
                           [x[2] for x in notes_list],\
-                          ["/delete_note/" + x[0] for x in notes_list])
+                          ["/delete_prediction/" + x[0] for x in notes_list])
 
 
         return render_template("private_page.html", notes = notes_table)
@@ -149,6 +149,20 @@ def predict_car_disposal():
     write_note_into_db(session['current_user'], prediction)    
 
     return(redirect(url_for("FUN_private")))
+
+@app.route('insurance')
+def fun_insurance():
+    if "current_user" in session.keys():
+        vehicle_list = read_vehicle_insurance_from_db(session['current_user'])
+        vehicle_table = zip([x[0] for x in vehicle_list],\
+                          [x[1] for x in vehicle_list],\
+                          [x[2] for x in vehicle_list],\
+                          [x[3] for x in vehicle_list],\
+                          [x[4] for x in vehicle_list],\
+                          ["/delete_vehicle/" + x[0] for x in vehicle_list])
+        return render_template('insurance.html', insurance = vehicle_table)
+    else:
+        return abort(401)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
