@@ -35,7 +35,11 @@ def FUN_root():
 
 @app.route("/public/")
 def FUN_public():
-    return render_template("public_page.html")
+    
+    if "current_user" in session.keys():
+        return render_template("insurance.html")
+    else:
+        return abort(401)
 
 @app.route("/private/")
 def FUN_private():
@@ -72,7 +76,7 @@ def FUN_delete_note(note_id):
 
 
 @app.route("/register_user", methods = ["POST"])
-def FUN_add_user():
+def FUN_add_users():
     if request.form.get('id').upper() in list_users():
         user_list = list_users()
         user_table = zip(range(1, len(user_list)+1),\
@@ -150,7 +154,7 @@ def predict_car_disposal():
 
     return(redirect(url_for("FUN_private")))
 
-@app.route('insurance')
+@app.route('/insurance')
 def fun_insurance():
     if "current_user" in session.keys():
         vehicle_list = read_vehicle_insurance_from_db(session['current_user'])
@@ -163,6 +167,7 @@ def fun_insurance():
         return render_template('insurance.html', insurance = vehicle_table)
     else:
         return abort(401)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

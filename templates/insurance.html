@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/static/css/style.css" type="text/css">
 {% extends "layout.html" %}
 {% block page_title %}Insurance{% endblock %}
 {% block body %}
@@ -6,25 +7,26 @@
     <form action="/add_vehicle_insurance" method ="post">
         <div class="insurance-form">
             <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <input type="text" class="insurance-field" value="" placeholder="make" name="vehicle">
                 <label class="  " for="vehicle-make"></label>
             </div>
             <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <input type="text" class="insurance-field" value="" placeholder="model" name="vehicle">
                 <label class="  " for="vehicle-model"></label>
             </div>
             <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <input type="text" class="insurance-field" value="" placeholder="year" name="vehicle">
                 <label class="  " for="vehicle-year"></label>
             </div>
             <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <input type="text" class="insurance-field" value="" placeholder="last Maintenance Date" name="vehicle">
                 <label class="  " for="vehicle-last-maintenance-date"></label>
             </div>
             <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="vehicle" name="vehicle">
+                <input type="text" class="insurance-field" value="" placeholder="Due Date" name="vehicle">
                 <label class="  " for="vehicle-insurance-due"></label>
             </div>
+            <input type="submit" value="Submit" class="btn">
         </div>
     </form>
 

@@ -28,6 +28,13 @@
     .login-form {
     text-align: center;
     }
+    .insurance-form {
+    position: fixed;
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+    text-align: center;
+    }
     .control-group {
     margin-bottom: 10px;
     }
