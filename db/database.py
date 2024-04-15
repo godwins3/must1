@@ -135,11 +135,13 @@ def match_user_id_with_image_uid(image_uid):
 
     return result
 
-
-
-
-
-
+def gen_report():
+    users_list = list_users()
+    report = []
+    for user in users_list:
+        predictions = read_note_from_db(user)
+        report.append(predictions)
+    return report
 
 
 if __name__ == "__main__":

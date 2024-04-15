@@ -1,6 +1,6 @@
 from flask import Flask, session, url_for, redirect, render_template, request, abort
 from db import *
-from db.database import list_users, verify, delete_user_from_db, add_user
+from db.database import list_users, verify, delete_user_from_db, add_user, gen_report
 from db.database import read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id, read_vehicle_insurance_from_db
 from joblib import load
 
@@ -54,6 +54,15 @@ def FUN_private():
         return render_template("private_page.html", notes = notes_table)
     else:
         return abort(401)
+# Function to generate HTML table
+def generate_html_table(data):
+    html_table = "<table border='1'><thead><tr><th>User ID</th><th>Timestamp</th><th>Note</th></tr></thead><tbody>"
+    for sublist in data:
+        for entry in sublist:
+            user_id, timestamp, note = entry
+            html_table += f"<tr><td>{user_id}</td><td>{timestamp}</td><td>{note}</td></tr>"
+    html_table += "</tbody></table>"
+    return html_table
 
 @app.route("/admin/")
 def FUN_admin():
@@ -62,7 +71,10 @@ def FUN_admin():
         user_table = zip(range(1, len(user_list)+1),\
                         user_list,\
                         [x + y for x,y in zip(["/delete_user/"] * len(user_list), user_list)])
-        return render_template("admin.html", users = user_table)
+        report = gen_report()
+        # Generate HTML table from data
+        html_table = generate_html_table(report)
+        return render_template("admin.html", users = user_table, html_table = html_table)
     else:
         return abort(401)
 
