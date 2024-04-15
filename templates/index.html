@@ -1,7 +1,17 @@
 {% extends "layout.html" %}
-{% block page_title %}welcome to fleet management system offering the following services{% endblock %}
+
+{% block page_title %}Welcome to Fleet Management System{% endblock %}
+
 {% block body %}
     {{ super() }}
-    
 
+    <!-- Your content for the body of the page goes here -->
+    <div class="container content" style="background-image: url('/static/img/range.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh; margin: 0; padding: 0; color: #ffffff;">
+        <h2>Services Offered</h2>
+        <ul>
+            <li>Vehicle Disposal period prediction</li>
+            <li>Insurance reminder</li>
+            <li>Report management</li>
+        </ul>
+    </div>
 {% endblock %}

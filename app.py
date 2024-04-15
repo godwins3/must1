@@ -166,6 +166,7 @@ def predict_car_disposal():
 
     return(redirect(url_for("FUN_private")))
 
+
 @app.route('/insurance')
 def fun_insurance():
     if "current_user" in session.keys():
@@ -179,7 +180,6 @@ def fun_insurance():
         return render_template('insurance.html', insurance = vehicle_table)
     else:
         return abort(401)
-
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
