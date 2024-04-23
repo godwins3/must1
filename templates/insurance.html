@@ -1,60 +1,71 @@
-<link rel="stylesheet" href="/static/css/style.css" type="text/css">
+<!DOCTYPE html>
 {% extends "layout.html" %}
-{% block page_title %}Insurance{% endblock %}
-{% block body %}
-    {{ super() }}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block page_title %}Insurance{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Additional custom styles */
+        /* You can add your custom styles here */
+    </style>
+</head>
+<body>
+    {% block body %}
+    <div class="container">
+        <form action="/add_vehicle_insurance" method="post">
+            <div class="form-group">
+                <label for="vehicle_make">Make</label>
+                <input type="text" class="form-control" id="vehicle_make" placeholder="Enter make" name="vehicle_make">
+            </div>
+            <div class="form-group">
+                <label for="vehicle_model">Model</label>
+                <input type="text" class="form-control" id="vehicle_model" placeholder="Enter model" name="vehicle_model">
+            </div>
+            <div class="form-group">
+                <label for="vehicle_year">Year</label>
+                <input type="text" class="form-control" id="vehicle_year" placeholder="Enter year" name="vehicle_year">
+            </div>
+            <div class="form-group">
+                <label for="vehicle_last_maintenance_date">Last Maintenance Date</label>
+                <input type="text" class="form-control" id="vehicle_last_maintenance_date" placeholder="Enter last maintenance date" name="vehicle_last_maintenance_date">
+            </div>
+            <div class="form-group">
+                <label for="vehicle_insurance_due">Insurance Due</label>
+                <input type="text" class="form-control" id="vehicle_insurance_due" placeholder="Enter insurance due date" name="vehicle_insurance_due">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
 
-    <form action="/add_vehicle_insurance" method ="post">
-        <div class="insurance-form">
-            <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="make" name="vehicle">
-                <label class="  " for="vehicle-make"></label>
-            </div>
-            <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="model" name="vehicle">
-                <label class="  " for="vehicle-model"></label>
-            </div>
-            <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="year" name="vehicle">
-                <label class="  " for="vehicle-year"></label>
-            </div>
-            <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="last Maintenance Date" name="vehicle">
-                <label class="  " for="vehicle-last-maintenance-date"></label>
-            </div>
-            <div class="control-group">
-                <input type="text" class="insurance-field" value="" placeholder="Due Date" name="vehicle">
-                <label class="  " for="vehicle-insurance-due"></label>
-            </div>
-            <input type="submit" value="Submit" class="btn">
-        </div>
-    </form>
-
-    {% if notes %}
-        <h3>Your Predictions</h3>
-        <table class="table small">
-            <thead>
+        {% if notes %}
+        <h2 class="mt-4">Your Insurance</h2>
+        <table class="table mt-3">
+            <thead class="thead-dark">
                 <tr>
-                  <th>Make</th>
-                  <th>Model</th>
-                  <th>Year</th>
-                  <th>Last Maintenance Date</th>
-                  <th>Insurance Due</th>
-                  <th>Action</th>
+                    <th scope="col">Make</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Last Maintenance Date</th>
+                    <th scope="col">Insurance Due</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
-            {% for make, model, year, last_maintenance_date, insurance_due, act in insurance %}
-                    <tr>
-                       <td> {{ make }} </td>
-                       <td> {{ model }} </td>
-                       <td> {{ year }} </td>
-                       <td> {{ last_maintenance_date }} </td>
-                       <td> {{ insurance_due }} </td>
-                       <td><a href={{act}}>Delete</a></td>
-                    </tr>
-                    
-            {% endfor %}
+            <tbody>
+                {% for make, model, year, last_maintenance_date, insurance_due, act in insurance %}
+                <tr>
+                    <td>{{ make }}</td>
+                    <td>{{ model }}</td>
+                    <td>{{ year }}</td>
+                    <td>{{ last_maintenance_date }}</td>
+                    <td>{{ insurance_due }}</td>
+                    <td><a href='/notify' class="btn btn-danger">Set Reminder</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
-    {% endif %}
-
-{% endblock %}
+        {% endif %}
+    </div>
+    {% endblock %}
+</body>
+</html>

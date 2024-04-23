@@ -1,7 +1,7 @@
 import sqlite3
 import hashlib
 import datetime
-# import pymongo
+import pymongo
 
 user_db_file_location = "database_file/users.db"
 note_db_file_location = "database_file/notes.db"
@@ -143,6 +143,11 @@ def gen_report():
         report.append(predictions)
     return report
 
+def insurance():
+    insurance_list = []
+    
+    return insurance_list
 
 if __name__ == "__main__":
     print(list_users())
+

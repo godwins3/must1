@@ -3,11 +3,15 @@ from db import *
 from db.database import list_users, verify, delete_user_from_db, add_user, gen_report
 from db.database import read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id, read_vehicle_insurance_from_db
 from joblib import load
+from pymongo import MongoClient
+import africastalking
 
 
 app = Flask(__name__)
 app.config.from_object('config')
 
+# Connect to MongoDB
+client = MongoClient('mongodb://localhost:27017/')  # Update with your MongoDB connection URI
 
 @app.errorhandler(401)
 def FUN_401(error):
@@ -56,7 +60,7 @@ def FUN_private():
         return abort(401)
 # Function to generate HTML table
 def generate_html_table(data):
-    html_table = "<table border='1'><thead><tr><th>User ID</th><th>Timestamp</th><th>Note</th></tr></thead><tbody>"
+    html_table = "<table border='1'><thead><tr><th>User ID</th><th>Timestamp</th><th>Prediction</th></tr></thead><tbody>"
     for sublist in data:
         for entry in sublist:
             user_id, timestamp, note = entry
@@ -72,6 +76,7 @@ def FUN_admin():
                         user_list,\
                         [x + y for x,y in zip(["/delete_user/"] * len(user_list), user_list)])
         report = gen_report()
+        
         # Generate HTML table from data
         html_table = generate_html_table(report)
         return render_template("admin.html", users = user_table, html_table = html_table)
@@ -170,16 +175,59 @@ def predict_car_disposal():
 @app.route('/insurance')
 def fun_insurance():
     if "current_user" in session.keys():
-        vehicle_list = read_vehicle_insurance_from_db(session['current_user'])
-        vehicle_table = zip([x[0] for x in vehicle_list],\
-                          [x[1] for x in vehicle_list],\
-                          [x[2] for x in vehicle_list],\
-                          [x[3] for x in vehicle_list],\
-                          [x[4] for x in vehicle_list],\
-                          ["/delete_vehicle/" + x[0] for x in vehicle_list])
-        return render_template('insurance.html', insurance = vehicle_table)
+        
+        return render_template('insurance.html', notes = False)
     else:
         return abort(401)
+    
+@app.route('/add_vehicle_insurance', methods=['POST'])
+def add_vehicle_insurance():
+    db = client['vehicle_insurance']
+    collection = db['insurance_data']
+    # Get data from the form
+    make = request.form.get('vehicle_make')
+    model = request.form.get('vehicle_model')
+    year = request.form.get('vehicle_year')
+    last_maintenance_date = request.form.get('vehicle_last_maintenance_date')
+    insurance_due = request.form.get('vehicle_insurance_due')
+
+    # Insert data into MongoDB
+    vehicle_insurance = {
+        'make': make,
+        'model': model,
+        'year': year,
+        'last_maintenance_date': last_maintenance_date,
+        'insurance_due': insurance_due
+    }
+    collection.insert_one(vehicle_insurance)
+
+    # Redirect to the main page
+    return render_template('insurance.html', notes=True, insurance=get_insurance_data())
+
+def get_insurance_data():
+    
+    db = client['vehicle_insurance']
+    collection = db['insurance_data']
+    return collection.find()
+
+@app.route('/notify', methods= ['POST'])
+def notify():
+    # Initialize Africa's Talking
+    africastalking.initialize(username='freddy2024', api_key='b73a18ff729e1eac16ce8fc34f6b2f3067bc85ec75b1e3734fd8c622dead34d4')
+
+    # Initialize SMS service
+    sms = africastalking.SMS
+
+    # Set the message parameters
+    recipients = ['+254764838739']  # Replace with recipient's phone number
+    message = "Hello your insurance reminder has been set successfully! You'll receive a reminder when your insurance is due"
+
+    # Send the SMS
+    response = sms.send(message, recipients)
+
+    # Print response
+    print(response)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
